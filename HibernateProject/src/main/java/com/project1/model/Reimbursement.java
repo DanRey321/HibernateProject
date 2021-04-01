@@ -6,7 +6,7 @@ import javax.persistence.Table;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name="Reimbursement")
+@Table(name="Reimbursement" , schema = "public")
 public class Reimbursement {
 	@Id
 	private int id;

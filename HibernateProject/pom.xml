@@ -8,8 +8,6 @@
     <packaging>war</packaging>
 
     <name>HibernateProject</name>
-
-
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -19,7 +17,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.2.12.Final</version>
+            <version>5.4.30.Final</version>
         </dependency>
 
 

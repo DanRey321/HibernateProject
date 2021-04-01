@@ -6,7 +6,9 @@
     <session-factory>
 
         <property name="hibernate.hbm2ddl.auto">update</property>
-
+        <property name="hibernate.hbm2ddl.auto">
+            update
+        </property>
         <property name = "hibernate.dialect">
             org.hibernate.dialect.PostgreSQL95Dialect
         </property>
@@ -32,8 +34,8 @@
         </property>
 
         <!-- List of XML mapping files -->
-        <mapping resource = "com.project1.model.Reimbursement"/>
-        <mapping resource = "com.project1.model.User"/>
+        <mapping class = "com.project1.model.Reimbursement"/>
+        <mapping class = "com.project1.model.User"/>
 
     </session-factory>
 </hibernate-configuration>
