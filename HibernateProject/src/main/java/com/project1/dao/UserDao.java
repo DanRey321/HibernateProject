@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +51,7 @@ public class UserDao implements GenericDao <User> {
 		User u = null;
 		
 		try(Connection conn = ConnectionUtil.getConnection()) {
-			String qSql = "SELECT * FROM ers_users WHERE ers_users_id = ?";
+			String qSql = "SELECT * FROM ers_users WHERE user_id = ?";
 			PreparedStatement ps = conn.prepareStatement(qSql);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -79,7 +78,7 @@ public class UserDao implements GenericDao <User> {
 		User u = null;
 		
 		try(Connection conn = ConnectionUtil.getConnection()) {
-			String qSql = "SELECT * FROM ers_users WHERE ers_username = ?";
+			String qSql = "SELECT * FROM ers_users WHERE username = ?";
 			PreparedStatement ps = conn.prepareStatement(qSql);
 			ps.setString(1, username.toLowerCase());
 			ResultSet rs = ps.executeQuery();
@@ -98,14 +97,50 @@ public class UserDao implements GenericDao <User> {
 	}
 
 	@Override
-	public void insert(User t) {
+	public User insert(User t) {
 		// TODO Auto-generated method stub
-		
+		//return null;
+		String sql = "insert into ers_users values (?, ?, ?, ?, ?, ?, ?)";
+		try(Connection conn = ConnectionUtil.getConnection()) {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, t.getUser_id());
+			pstmt.setString(2, t.getUsername());
+			pstmt.setString(3, t.getPassword());
+			pstmt.setString(4, t.getFirstname());
+			pstmt.setString(5, t.getLastname());
+			pstmt.setString(6, t.getEmail());
+			pstmt.setInt(7, t.getRole_id());
+
+			if (pstmt.executeUpdate() != 1) {
+				throw new SQLException("Inserting Employee failed, no rows were affected");
+			}
+
+			//return t;
+			//connection.commit();
+
+
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return t;
 	}
 
 	@Override
-	public void delete(User t) {
+	public boolean delete(User t) {
 		// TODO Auto-generated method stub
-		
+		String sql = "delete from ers_users where username = ?";
+		try(Connection connection = ConnectionUtil.getConnection()){
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, t.getUsername());
+
+			if(statement.executeUpdate()< 1){
+				throw new SQLException("Deleting Failed, no row affected");
+			}
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }

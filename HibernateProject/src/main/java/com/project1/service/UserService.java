@@ -3,6 +3,7 @@ package com.project1.service;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -12,15 +13,20 @@ import com.project1.model.User;
 
 public class UserService {
 	private UserDao ud;
+	//private UserDaoH uh;
 	private static final Logger LOGGER = Logger.getLogger(UserService.class);
 	
 	public UserService() {
 		ud = new UserDao();
+		//uh = new UserDaoH();
 	}
 	
 	public List<User> fetchAllUsers() {
 		return ud.getList();
 	}
+	//public List<User> fetchAllUsersH() {
+		//return uh.getAll();
+	//}
 	
 	public User getUserById(int id) {
 		return ud.getById(id);
@@ -65,5 +71,13 @@ public class UserService {
 		}
 		
 		return null;
+	}
+
+	public User insertUser(User user)throws SQLException{
+		return ud.insert(user);
+	}
+
+	public boolean deleteUser(User user) throws SQLException{
+		return ud.delete(user);
 	}
 }

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project1.model.User;
 import com.project1.service.UserService;
 
 import javax.servlet.ServletException;
@@ -45,9 +46,68 @@ public class UserServlet extends HttpServlet {
 
         System.out.println(jsonString);
 
+        //String json = objectMapper.writeValueAsString(userService.fetchAllUsers());
         String json = objectMapper.writeValueAsString(userService.fetchAllUsers());
         resp.getWriter().append(json);
         resp.setContentType("application/json");
+
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+        BufferedReader reader = req.getReader();
+
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+
+        String jsonString = sb
+                .toString();
+
+        User user = null;
+
+        //System.out.println(jsonString);
+        try {
+            user = userService.insertUser(objectMapper.readValue(jsonString, User.class));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        String insertedEmployeeJSON = objectMapper.writeValueAsString(user);
+        resp.getWriter().append(insertedEmployeeJSON);
+
+        resp.setContentType("application/json");
+        resp.setStatus(201);
+        System.out.println(user.toString());
+
+
+    }
+
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        BufferedReader reader = req.getReader();
+
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+
+        String jsonString = sb
+                .toString();
+
+        try{
+            if(userService.deleteUser(objectMapper.readValue(jsonString, User.class))){
+                resp.getWriter().append(" Deleted from database!!!");
+                resp.setStatus(200);
+            }else{
+                resp.getWriter().append(" Delete Employee failed");
+                resp.setStatus(400);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
 
     }
 

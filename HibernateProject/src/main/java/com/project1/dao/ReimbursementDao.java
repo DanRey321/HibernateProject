@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import com.project1.util.ConnectionFactory;
+import com.project1.model.User;
 import org.apache.log4j.Logger;
 
 import com.project1.model.Reimbursement;
@@ -107,7 +107,7 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 	}
 
 	@Override
-	public void insert(Reimbursement r) {
+	public User insert(Reimbursement r) {
 		try(Connection conn = ConnectionUtil.getConnection()) {
 			String sql = "INSERT INTO ers_reimbursement(reimb_amount, reimb_submitted, reimb_description, "
 					   + "reimb_author, reimb_status_id, reimb_type_id) VALUES(?, ?, ?, ?, ?, ?)";
@@ -127,6 +127,7 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 			e.printStackTrace();
 			LOGGER.error("An attempt to insert a reimbursement to the database failed.");
 		}
+		return null;
 	}
 	
 	public void updateList(int[][] i, int resolver) {
@@ -173,8 +174,9 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 	}
 	
 	@Override
-	public void delete(Reimbursement r) {
-		
+	public boolean delete(Reimbursement r) {
+
+		return false;
 	}
 	
 }
