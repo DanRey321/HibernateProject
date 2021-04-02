@@ -12,7 +12,7 @@ public class ConnectionUtil {
 
     public static Connection getConnection() throws SQLException{
 
-        String url = "jdbc:postgresql://samplecar.csuhfolohico.us-west-1.rds.amazonaws.com:5432/postgres?currentSchema=public2";
+        String url = "jdbc:postgresql://samplecar.csuhfolohico.us-west-1.rds.amazonaws.com:5432/postgres";
         String username = "danrey321";
         String password = "password";
 

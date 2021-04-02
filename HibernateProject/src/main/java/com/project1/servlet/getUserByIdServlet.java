@@ -43,7 +43,7 @@ public class getUserByIdServlet extends HttpServlet{
                 .toString();
 
         User user = objectMapper.readValue(jsonString, User.class);
-        int userid = user.getUser_id();
+        int userid = user.getUserid();
         System.out.println(userid);
 
         String json = objectMapper.writeValueAsString(userService.getUserById(userid));
@@ -51,6 +51,8 @@ public class getUserByIdServlet extends HttpServlet{
         resp.setContentType("application/json");
 
     }
+
+
 
 
 }

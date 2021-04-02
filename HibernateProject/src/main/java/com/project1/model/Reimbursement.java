@@ -1,5 +1,7 @@
 package com.project1.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -11,7 +13,9 @@ public class Reimbursement {
 	@Id
 	private int id;
 	private float amount;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Timestamp submitted;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Timestamp resolved;
 	private String description;
 	private int author;

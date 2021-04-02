@@ -34,6 +34,13 @@ public class ReimbursementService {
 	public List<Reimbursement> getReimbursementsByUserID(int id) {
 		return rd.getByUserId(id);
 	}
+	public Reimbursement getReimbursementsByID(int id) {
+		return rd.getById(id);
+	}
+
+	public boolean deleteById(Reimbursement r){
+		return rd.delete(r);
+	}
 	
 	public void updateReimbursements(int[][] i, int r) {
 		rd.updateList(i, r);

@@ -28,7 +28,7 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 	
 	private Reimbursement objectConstructor(ResultSet rs) throws SQLException {
 		return new Reimbursement(rs.getInt(1), rs.getFloat(2), rs.getTimestamp(3), rs.getTimestamp(4),
-							rs.getString(5), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getInt(10));
+							rs.getString(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9));
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 		List<Reimbursement> l = new ArrayList<Reimbursement>();
 		
 		try (Connection conn = ConnectionUtil.getConnection()) {
-			String qSql = "SELECT * FROM ers_reimbursement";
+			String qSql = "SELECT * FROM reimbursement";
 			Statement s = conn.createStatement();
 			ResultSet rs = s.executeQuery(qSql);
 			
@@ -59,7 +59,7 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 		Reimbursement r = null;
 		
 		try(Connection conn = ConnectionUtil.getConnection()) {
-			String qSql = "SELECT * FROM ers_reimbursement WHERE reimb_id = ?";
+			String qSql = "SELECT * FROM reimbursement WHERE id = ?";
 			PreparedStatement ps = conn.prepareStatement(qSql);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -82,7 +82,7 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 		List<Reimbursement> l = new ArrayList<Reimbursement>();
 		
 		try(Connection conn = ConnectionUtil.getConnection()) {
-			String qSql = "SELECT * FROM ers_reimbursement WHERE reimb_author = ?";
+			String qSql = "SELECT * FROM reimbursement WHERE author = ?";
 			PreparedStatement ps = conn.prepareStatement(qSql);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -109,17 +109,21 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 	@Override
 	public User insert(Reimbursement r) {
 		try(Connection conn = ConnectionUtil.getConnection()) {
-			String sql = "INSERT INTO ers_reimbursement(reimb_amount, reimb_submitted, reimb_description, "
-					   + "reimb_author, reimb_status_id, reimb_type_id) VALUES(?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO reimbursement(id, amount, submitted, resolved, description, "
+					   + "author, resolver, status_id, type_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setFloat(1, r.getAmount());
+			ps.setInt(1, r.getId());
+			ps.setFloat(2, r.getAmount());
 			Calendar cal = Calendar.getInstance();
-			ps.setTimestamp(2, new Timestamp(cal.getTime().getTime()));
-			ps.setString(3, r.getDescription());
-			ps.setInt(4, r.getAuthor());
-			ps.setInt(5, r.getStatus_id());
-			ps.setInt(6, r.getType_id());
-			
+			ps.setTimestamp(3, new Timestamp(cal.getTime().getTime()));
+			ps.setTimestamp(4, r.getResolved());
+			ps.setString(5, r.getDescription());
+			ps.setInt(6, r.getAuthor());
+			ps.setInt(7, r.getResolver());
+			ps.setInt(8, r.getStatus_id());
+			ps.setInt(9, r.getType_id());
+
+
 			ps.executeUpdate();
 			ps.closeOnCompletion();
 			LOGGER.debug("A new reimbursement was successfully added to the database.");
@@ -172,11 +176,24 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 			e.printStackTrace();
 		}
 	}
-	
-	@Override
-	public boolean delete(Reimbursement r) {
 
-		return false;
+	public boolean delete(Reimbursement r) {
+		String sql = "delete from Reimbursement where id = ?";
+		//String sql = "delete from ers_users where username = ?";
+		try(Connection connection = ConnectionUtil.getConnection()){
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, r.getId());
+
+			if(statement.executeUpdate()< 1){
+				throw new SQLException("Deleting Failed, no row affected");
+			}
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+		//return false;
 	}
 	
 }
