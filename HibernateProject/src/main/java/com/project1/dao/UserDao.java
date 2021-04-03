@@ -1,19 +1,24 @@
 package com.project1.dao;
 
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
-import com.project1.model.User;
-import org.hibernate.Session;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 
+import org.apache.log4j.Logger;
+
+import com.project1.model.User;
+import com.project1.util.ConnectionUtil;
 
 /*
  * Purpose of this Dao is to send/retrieve info about a reimbursement
  * to/from the database. It then returns the composed Reimbursement Object.
  */
+@Deprecated
 public class UserDao implements GenericDao <User> {
 	private static final Logger LOGGER = Logger.getLogger(UserDao.class);
 
@@ -24,80 +29,84 @@ public class UserDao implements GenericDao <User> {
 	
 	@Override
 	public List<User> getList() {
-		Session session = new Configuration().configure().buildSessionFactory().openSession();
-
-		List<User> result = session.createQuery("from User").list();
-
-		if(result.isEmpty()){
-			LOGGER.error("An attempt to get all users from the database failed.");
-			//TODO:Should I be returning null?
-			return null;
-		}else{
+		List<User> l = new ArrayList<User>();
+		
+		try (Connection c = ConnectionUtil.getConnection()) {
+			String qSql = "SELECT * FROM ers_users";
+			Statement s = c.createStatement();
+			ResultSet rs = s.executeQuery(qSql);
+			
+			while(rs.next()) {
+				l.add(objectConstructor(rs));
+			}
 			LOGGER.debug("A list of users was retrieved from the database.");
-			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOGGER.error("An attempt to get all users from the database failed.");
 		}
+		return l;
 	}
 
 	@Override
 	public User getById(int id) {
-		Session session = new Configuration().configure().buildSessionFactory().openSession();
-
-		Query<User> query = session.createNamedQuery("getUserById", User.class).setParameter("id", id);
-		List<User> result = query.getResultList();
-
-		if(result.isEmpty()){
-			LOGGER.error("An attempt to get info about user ID " + id + " from the database failed.");
-			return null;
-		}else{
+		User u = null;
+		
+		try(Connection c = ConnectionUtil.getConnection()) {
+			String qSql = "SELECT * FROM ers_users WHERE ers_users_id = ?";
+			PreparedStatement ps = c.prepareStatement(qSql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next())
+				u = objectConstructor(rs);
+			
 			LOGGER.debug("Information about user ID " + id + " was retrieved from the database.");
-			return result.get(0);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOGGER.error("An attempt to get info about user ID " + id + " from the database failed.");
 		}
+		return u;
 	}
 	
 	@Override
 	public List<User> getByUserId(int id) {
 		// TODO Auto-generated method stub
-		Session session = new Configuration().configure().buildSessionFactory().openSession();
-
-		Query<User> query = session.createNamedQuery("getUserById", User.class).setParameter("id", id);
-		List<User> result = query.getResultList();
-
-		if(result.isEmpty()){
-			LOGGER.error("An attempt to get info about user ID " + id + " from the database failed.");
-			return null;
-		}else{
-			LOGGER.debug("Information about user ID " + id + " was retrieved from the database.");
-			return result;
-		}
+		return null;
 	}
 	
 	@Override
 	public User getByUsername(String username) {
-		Session session = new Configuration().configure().buildSessionFactory().openSession();
-
-		Query<User> query = session.createNamedQuery("getByUsername", User.class).setParameter("username", username);
-		List<User> result = query.getResultList();
-
-		if(result.isEmpty()){
-			LOGGER.error("An attempt to get info about username " + username + " from the database failed.");
-			return null;
-		}else{
+		User u = null;
+		
+		try(Connection c = ConnectionUtil.getConnection()) {
+			String qSql = "SELECT * FROM ers_users WHERE ers_username = ?";
+			PreparedStatement ps = c.prepareStatement(qSql);
+			ps.setString(1, username.toLowerCase());
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				//System.out.println("User object was created!");
+				u = objectConstructor(rs);
+			}
+			
 			LOGGER.debug("Information about username " + username + " was retrieved from the database.");
-			return result.get(0);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOGGER.error("An attempt to get info about username " + username + " from the database failed.");
 		}
+		return u;
 	}
 
 	@Override
-	public void insert(User t) {
+	public Serializable insert(User t) {
 		// TODO Auto-generated method stub
-		Session session = new Configuration().configure().buildSessionFactory().openSession();
 
-		//return null;
+		return null;
 	}
 
 	@Override
-	public boolean delete(User t) {
+	public void delete(User t) {
 		// TODO Auto-generated method stub
-		return false;
+		
 	}
 }

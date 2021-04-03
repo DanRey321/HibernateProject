@@ -1,6 +1,5 @@
 package com.project1;
 
-import com.project1.dao.UserDao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

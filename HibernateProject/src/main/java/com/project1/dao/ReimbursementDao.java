@@ -1,5 +1,6 @@
 package com.project1.dao;
 
+import java.io.Serializable;
 import java.sql.Array;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -13,7 +14,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import com.project1.model.User;
 import org.apache.log4j.Logger;
 
 import com.project1.model.Reimbursement;
@@ -23,6 +23,7 @@ import com.project1.util.ConnectionUtil;
  * Purpose of this Dao is to send/retrieve info about a reimbursement
  * to/from the database. It then returns the composed Reimbursement Object.
  */
+@Deprecated
 public class ReimbursementDao implements GenericDao<Reimbursement> {
 	private static final Logger LOGGER = Logger.getLogger(ReimbursementDao.class);
 	
@@ -107,7 +108,7 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 	}
 
 	@Override
-	public void insert(Reimbursement r) {
+	public Serializable insert(Reimbursement r) {
 		try(Connection conn = ConnectionUtil.getConnection()) {
 			String sql = "INSERT INTO reimbursement(id, amount, submitted, resolved, description, "
 					   + "author, resolver, status_id, type_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -131,7 +132,7 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 			e.printStackTrace();
 			LOGGER.error("An attempt to insert a reimbursement to the database failed.");
 		}
-		//return null;
+		return null;
 	}
 	
 	public void updateList(int[][] i, int resolver) {
@@ -177,7 +178,7 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 		}
 	}
 
-	public boolean delete(Reimbursement r) {
+	public void delete(Reimbursement r) {
 		String sql = "delete from Reimbursement where id = ?";
 		//String sql = "delete from ers_users where username = ?";
 		try(Connection connection = ConnectionUtil.getConnection()){
@@ -190,9 +191,9 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 
 		}catch(SQLException e){
 			e.printStackTrace();
-			return false;
+			//return false;
 		}
-		return true;
+		//return true;
 		//return false;
 	}
 	

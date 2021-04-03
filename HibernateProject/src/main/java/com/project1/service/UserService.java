@@ -8,16 +8,16 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.project1.dao.UserDao;
+import com.project1.dao.UserDaoHibernate;
 import com.project1.model.User;
 
 public class UserService {
-	private UserDao ud;
+	private UserDaoHibernate ud;
 	//private UserDaoH uh;
 	private static final Logger LOGGER = Logger.getLogger(UserService.class);
 	
 	public UserService() {
-		ud = new UserDao();
+		ud = new UserDaoHibernate();
 		//uh = new UserDaoH();
 	}
 	
@@ -73,11 +73,20 @@ public class UserService {
 		return null;
 	}
 
-	public void insertUser(User user)throws SQLException{
-		ud.insert(user);
+	public User insertUser(User user)throws SQLException{
+		int id;
+		try {
+			id = Integer.parseInt(ud.insert(user).toString());
+			return ud.getById(id);
+
+		}catch (Exception ex){
+			ex.printStackTrace();
+		}
+		return null;
 	}
 
 	public boolean deleteUser(User user) throws SQLException{
-		return ud.delete(user);
+		ud.delete(user);
+		return ud.getById(user.getUserid()) != null;
 	}
 }

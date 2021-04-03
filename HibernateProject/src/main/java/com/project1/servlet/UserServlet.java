@@ -1,6 +1,4 @@
 package com.project1.servlet;
-import com.project1.dao.ReimbursementDao;
-import com.project1.dao.UserDao;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -70,7 +68,7 @@ public class UserServlet extends HttpServlet {
 
         //System.out.println(jsonString);
         try {
-            userService.insertUser(objectMapper.readValue(jsonString, User.class));
+            user = userService.insertUser(objectMapper.readValue(jsonString, User.class));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -79,7 +77,8 @@ public class UserServlet extends HttpServlet {
 
         resp.setContentType("application/json");
         resp.setStatus(201);
-        System.out.println(user.toString());
+        if(user!=null)
+            System.out.println(user.toString());
 
 
     }

@@ -1,15 +1,15 @@
 package com.project1.dao;
 
-import com.project1.model.Reimbursement;
-import com.project1.model.User;
+import org.hibernate.HibernateException;
 
+import java.io.Serializable;
 import java.util.List;
 
 public interface GenericDao <T> {
-	List<T> getList();
+	List<T> getList() throws HibernateException;
 	T getById(int id);
 	List<T> getByUserId(int id);
 	T getByUsername(String username);
-	void insert(T t);
-	boolean delete(T t);
+	Serializable insert(T t);
+	void delete(T t);
 }

@@ -1,21 +1,17 @@
 package com.project1.service;
 
 import java.util.List;
-
 import com.project1.dao.ReimbursementDaoHibernate;
 import org.apache.log4j.Logger;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project1.dao.ReimbursementDao;
 import com.project1.model.Reimbursement;
 
 public class ReimbursementService {
-	private ReimbursementDao rd;
 	private ReimbursementDaoHibernate rh;
 	private static final Logger LOGGER = Logger.getLogger(ReimbursementService.class);
 	
 	public ReimbursementService() {
-		rd = new ReimbursementDao();
+		//rd = new ReimbursementDao();
 		rh = new ReimbursementDaoHibernate();
 	}
 	
@@ -31,7 +27,7 @@ public class ReimbursementService {
 	}
 	
 	public List<Reimbursement> fetchAllReimbursements() {
-		return rd.getList();
+		return rh.getList();
 	}
 	public List<Reimbursement> fetchAllReimbursementsHibernate() {
 		return rh.getList();
@@ -45,10 +41,11 @@ public class ReimbursementService {
 	}
 
 	public boolean deleteById(Reimbursement r){
-		return rd.delete(r);
+		//return rh.delete(r);
+		return false;
 	}
 	
 	public void updateReimbursements(int[][] i, int r) {
-		rd.updateList(i, r);
+		//rh.updateList(i, r);
 	}
 }
