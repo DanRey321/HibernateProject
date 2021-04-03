@@ -70,7 +70,7 @@ public class UserServlet extends HttpServlet {
 
         //System.out.println(jsonString);
         try {
-            user = userService.insertUser(objectMapper.readValue(jsonString, User.class));
+            userService.insertUser(objectMapper.readValue(jsonString, User.class));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

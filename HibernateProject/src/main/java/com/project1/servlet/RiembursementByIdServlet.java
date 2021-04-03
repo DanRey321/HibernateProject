@@ -60,9 +60,7 @@ public class RiembursementByIdServlet extends HttpServlet {
             resp.setContentType("application/json");
 
         }
-        //String json = objectMapper.writeValueAsString(rService.getReimbursementsByUserID(userid));
 
-        //resp.setContentType("application/json");
     }
 
 }
