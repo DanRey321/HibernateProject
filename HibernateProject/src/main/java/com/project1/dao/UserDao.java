@@ -88,11 +88,11 @@ public class UserDao implements GenericDao <User> {
 	}
 
 	@Override
-	public User insert(User t) {
+	public void insert(User t) {
 		// TODO Auto-generated method stub
 		Session session = new Configuration().configure().buildSessionFactory().openSession();
 
-		return null;
+		//return null;
 	}
 
 	@Override

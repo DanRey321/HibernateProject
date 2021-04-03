@@ -73,8 +73,8 @@ public class UserService {
 		return null;
 	}
 
-	public User insertUser(User user)throws SQLException{
-		return ud.insert(user);
+	public void insertUser(User user)throws SQLException{
+		ud.insert(user);
 	}
 
 	public boolean deleteUser(User user) throws SQLException{

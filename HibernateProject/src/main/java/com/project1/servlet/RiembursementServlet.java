@@ -31,9 +31,13 @@ public class RiembursementServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-        String json = objectMapper.writeValueAsString(rService.fetchAllReimbursements());
+
+
+        String json = objectMapper.writeValueAsString(rService.fetchAllReimbursementsHibernate());
         resp.getWriter().append(json);
         resp.setContentType("application/json");
+
+
 
     }
 
@@ -50,7 +54,9 @@ public class RiembursementServlet extends HttpServlet {
         String jsonString = sb
                 .toString();
 
-        User user = null;
+       //
+        //
+        // User user = null;
 
         rService.createReimbursement(jsonString);
 

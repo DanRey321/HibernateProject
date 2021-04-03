@@ -107,7 +107,7 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 	}
 
 	@Override
-	public User insert(Reimbursement r) {
+	public void insert(Reimbursement r) {
 		try(Connection conn = ConnectionUtil.getConnection()) {
 			String sql = "INSERT INTO reimbursement(id, amount, submitted, resolved, description, "
 					   + "author, resolver, status_id, type_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -131,7 +131,7 @@ public class ReimbursementDao implements GenericDao<Reimbursement> {
 			e.printStackTrace();
 			LOGGER.error("An attempt to insert a reimbursement to the database failed.");
 		}
-		return null;
+		//return null;
 	}
 	
 	public void updateList(int[][] i, int resolver) {
