@@ -100,7 +100,7 @@ public class UserServlet extends HttpServlet {
                 resp.getWriter().append(" Deleted from database!!!");
                 resp.setStatus(200);
             }else{
-                resp.getWriter().append(" Delete Employee failed");
+                resp.getWriter().append(" Delete user failed");
                 resp.setStatus(400);
             }
         }catch(SQLException e){
