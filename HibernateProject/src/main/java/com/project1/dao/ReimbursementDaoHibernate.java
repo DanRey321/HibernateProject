@@ -87,4 +87,13 @@ public class ReimbursementDaoHibernate implements GenericDao<Reimbursement>{
             LOGGER.error("An attempt to delete a reimbursement from the database was made.");
         }
     }
+
+    //@Override
+    public void update(Reimbursement reimbursement){
+        try(Session session = HibernateUtility.INSTANCE.getSessionFactoryInstance().openSession()){
+            Transaction tran = session.beginTransaction();
+            session.update(reimbursement);
+            tran.commit();
+        }
+    }
 }
