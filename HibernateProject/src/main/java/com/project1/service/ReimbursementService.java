@@ -40,9 +40,11 @@ public class ReimbursementService {
 		return rh.getById(id);
 	}
 
-	public boolean deleteById(Reimbursement r){
-		//return rh.delete(r);
-		return false;
+	public boolean deleteById(int id){
+		Reimbursement r = rh.getById(id);
+		rh.delete(r);
+		return rh.getById(id) == null;
+		//return false;
 	}
 	
 	public void updateReimbursements(int[][] i, int r) {

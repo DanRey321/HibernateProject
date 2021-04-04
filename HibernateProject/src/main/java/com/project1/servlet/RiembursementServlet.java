@@ -75,7 +75,12 @@ public class RiembursementServlet extends HttpServlet {
         String jsonString = sb
                 .toString();
 
-        if(rService.deleteById(objectMapper.readValue(jsonString, Reimbursement.class))){
+
+        Reimbursement reimbursement = objectMapper.readValue(jsonString, Reimbursement.class);
+        int id = reimbursement.getId();
+
+
+        if(rService.deleteById(id)){
             resp.getWriter().append(" Deleted from database!!!");
             resp.setStatus(200);
         }
