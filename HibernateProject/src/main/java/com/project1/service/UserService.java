@@ -100,4 +100,9 @@ public class UserService {
 		ud.delete(user);
 		return ud.getById(user.getUserid()) == null;
 	}
+
+	public boolean deleteUser(String username) throws SQLException{
+		ud.delete(username);
+		return ud.getByUsername(username) == null;
+	}
 }

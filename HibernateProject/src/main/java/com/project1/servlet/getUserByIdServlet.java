@@ -44,7 +44,7 @@ public class getUserByIdServlet extends HttpServlet{
 
         User user = objectMapper.readValue(jsonString, User.class);
         int userid = user.getUserid();
-        System.out.println(userid);
+        //System.out.println(userid);
 
         String json = objectMapper.writeValueAsString(userService.getUserById(userid));
         resp.getWriter().append(json);

@@ -6,6 +6,7 @@ import java.util.List;
 import com.project1.util.HibernateUtility;
 import org.apache.log4j.Logger;
 import com.project1.model.User;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
@@ -100,6 +101,23 @@ public class UserDaoHibernate implements GenericDao <User> {
 			session.delete(t);
 			session.getTransaction().commit();
 			LOGGER.error("An attempt to delete a user from the database was made.");
+		}
+	}
+	public void delete(String username) {
+		try(Session session = HibernateUtility.INSTANCE.getSessionFactoryInstance().openSession()){
+			session.beginTransaction();
+
+			int rowsUpdated = session.createQuery("DELETE FROM User WHERE username=:username").setParameter("username",username).executeUpdate();
+			if (rowsUpdated == 0) {
+				LOGGER.error("User with username: "+username+" was NOT deleted from the database");
+			} else {
+				LOGGER.error("User with username: "+username+" was deleted from the database");
+			}
+			session.getTransaction().commit();
+
+		}catch (HibernateException ex){
+			LOGGER.error("User with username: "+username+" was NOT deleted from the database");
+			ex.printStackTrace();
 		}
 	}
 }
