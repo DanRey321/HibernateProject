@@ -127,6 +127,7 @@ public class ReimbursementDaoHibernate implements GenericDao<Reimbursement>{
                         .setParameter("id",array[1][i])
                         .executeUpdate();
             }
+            session.getTransaction().commit();
             LOGGER.debug(rowCount + " reimbursement" + ((rowCount != 1) ? "s" : "") + " modified by user ID " + resolver + ".");
         }
     }
