@@ -50,7 +50,7 @@ public class UserDaoHibernate implements GenericDao <User> {
 	@Override
 	public List<User> getByUserId(int id) {
 		try(Session session = HibernateUtility.INSTANCE.getSessionFactoryInstance().openSession()){
-			List<User> result = session.createQuery("From User WHERE userid=:userid",User.class).setParameter("userid",id).getResultList();
+			List<User> result = session.createQuery("FROM User WHERE userid=:userid",User.class).setParameter("userid",id).getResultList();
 
 			if(result.isEmpty()){
 				LOGGER.error("An attempt to get info about user ID " + id + " from the database was made, but it came empty.");
@@ -65,9 +65,7 @@ public class UserDaoHibernate implements GenericDao <User> {
 	@Override
 	public User getByUsername(String username) {
 		try(Session session = HibernateUtility.INSTANCE.getSessionFactoryInstance().openSession()){
-			Query<User> query = session.createNamedQuery("getByUsername", User.class).setParameter("username", username);
-			List<User> result = query.getResultList();
-
+			List<User> result = session.createQuery("FROM User WHERE username=:username", User.class).setParameter("username", username).getResultList();
 			if(result.isEmpty()){
 				LOGGER.error("An attempt to get info about username " + username + " from the database was made, but it came empty.");
 				return null;

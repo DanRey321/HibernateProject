@@ -63,6 +63,7 @@ public class UserService {
 				
 				if(u.getPassword().equals(hash)) {
 					//System.out.println("Hash matched!");
+					u.setPassword("");
 					return u;
 				}
 			} catch (NoSuchAlgorithmException e) {
@@ -75,7 +76,17 @@ public class UserService {
 
 	public User insertUser(User user)throws SQLException{
 		int id;
+		String hashPass = user.getUsername() + user.getPassword() + "salt";
+
 		try {
+			MessageDigest m = MessageDigest.getInstance("md5");
+			byte[] messageDigest = m.digest(hashPass.getBytes());
+			BigInteger n = new BigInteger(1, messageDigest);
+			String hash = n.toString(16);
+			while(hash.length() < 32) {
+				hash = "0" + hash;
+			}
+			user.setPassword(hash);
 			id = Integer.parseInt(ud.insert(user).toString());
 			return ud.getById(id);
 
