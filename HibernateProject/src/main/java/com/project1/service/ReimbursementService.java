@@ -11,7 +11,6 @@ public class ReimbursementService {
 	private static final Logger LOGGER = Logger.getLogger(ReimbursementService.class);
 	
 	public ReimbursementService() {
-		//rd = new ReimbursementDao();
 		rh = new ReimbursementDaoHibernate();
 	}
 	
@@ -29,9 +28,6 @@ public class ReimbursementService {
 	public List<Reimbursement> fetchAllReimbursements() {
 		return rh.getList();
 	}
-	public List<Reimbursement> fetchAllReimbursementsHibernate() {
-		return rh.getList();
-	}
 	
 	public List<Reimbursement> getReimbursementsByUserID(int id) {
 		return rh.getByUserId(id);
@@ -40,14 +36,18 @@ public class ReimbursementService {
 		return rh.getById(id);
 	}
 
-	public boolean deleteById(int id){
-		Reimbursement r = rh.getById(id);
+	public boolean delete(Reimbursement r){
 		rh.delete(r);
-		return rh.getById(id) == null;
-		//return false;
+		return rh.getById(r.getId())==null;
 	}
-	
+
+	public boolean delete(int r){
+		rh.delete(r);
+		return rh.getById(r)==null;
+	}
+
+
 	public void updateReimbursements(int[][] i, int r) {
-		//rh.updateList(i, r);
+		rh.updateList(i, r);
 	}
 }

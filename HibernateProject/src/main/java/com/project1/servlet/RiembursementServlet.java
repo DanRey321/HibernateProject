@@ -1,15 +1,11 @@
 package com.project1.servlet;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.SQLException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project1.model.Reimbursement;
-import com.project1.model.User;
 import com.project1.service.ReimbursementService;
-import com.project1.service.UserService;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +29,7 @@ public class RiembursementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 
 
-        String json = objectMapper.writeValueAsString(rService.fetchAllReimbursementsHibernate());
+        String json = objectMapper.writeValueAsString(rService.fetchAllReimbursements());
         resp.getWriter().append(json);
         resp.setContentType("application/json");
 
@@ -75,12 +71,7 @@ public class RiembursementServlet extends HttpServlet {
         String jsonString = sb
                 .toString();
 
-
-        Reimbursement reimbursement = objectMapper.readValue(jsonString, Reimbursement.class);
-        int id = reimbursement.getId();
-
-
-        if(rService.deleteById(id)){
+        if(rService.delete(objectMapper.readValue(jsonString, Reimbursement.class))){
             resp.getWriter().append(" Deleted from database!!!");
             resp.setStatus(200);
         }
