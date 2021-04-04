@@ -3,9 +3,6 @@ package com.project1.model;
 
 import javax.persistence.*;
 
-@NamedQueries({@NamedQuery(name = "getUserById", query = "from User where userid = :id"),
-		@NamedQuery(name = "getByUsername", query = "from User where username = :username")})
-
 @Entity
 @Table(name="users", schema = "public")
 public class User {

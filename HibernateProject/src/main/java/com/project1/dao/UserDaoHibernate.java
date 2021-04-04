@@ -2,6 +2,8 @@ package com.project1.dao;
 
 import java.io.Serializable;
 import java.util.List;
+
+import com.project1.util.HibernateUtility;
 import org.apache.log4j.Logger;
 import com.project1.model.User;
 import org.hibernate.Session;
@@ -18,11 +20,10 @@ public class UserDaoHibernate implements GenericDao <User> {
 	
 	@Override
 	public List<User> getList() {
-		try(Session session = new Configuration().configure().buildSessionFactory().openSession()){
-			List<User> result = session.createQuery("from User").list();
+		try(Session session = HibernateUtility.INSTANCE.getSessionFactoryInstance().openSession()){
+			List<User> result = session.createQuery("from User",User.class).getResultList();
 			if(result.isEmpty()){
-				LOGGER.error("An attempt to get all users from the database failed.");
-				//TODO:Should I be returning null?
+				LOGGER.error("An attempt to get all users from the database was made, but it came empty.");
 				return null;
 			}else{
 				LOGGER.debug("A list of users was retrieved from the database.");
@@ -34,30 +35,25 @@ public class UserDaoHibernate implements GenericDao <User> {
 
 	@Override
 	public User getById(int id) {
-		try(Session session = new Configuration().configure().buildSessionFactory().openSession()){
-			Query<User> query = session.createNamedQuery("getUserById", User.class).setParameter("id", id);
-			List<User> result = query.getResultList();
-
-			if(result.isEmpty()){
-				LOGGER.error("An attempt to get info about user ID " + id + " from the database failed.");
+		try(Session session = HibernateUtility.INSTANCE.getSessionFactoryInstance().openSession()){
+			User result = session.get(User.class,id);
+			if(result==null){
+				LOGGER.error("An attempt to get info about user ID " + id + " from the database was made, but it came empty.");
 				return null;
 			}else{
 				LOGGER.debug("Information about user ID " + id + " was retrieved from the database.");
-				return result.get(0);
+				return result;
 			}
 		}
-
-
 	}
 	
 	@Override
 	public List<User> getByUserId(int id) {
-		try(Session session = new Configuration().configure().buildSessionFactory().openSession()){
-			Query<User> query = session.createNamedQuery("getUserById", User.class).setParameter("id", id);
-			List<User> result = query.getResultList();
+		try(Session session = HibernateUtility.INSTANCE.getSessionFactoryInstance().openSession()){
+			List<User> result = session.createQuery("From User WHERE userid=:userid",User.class).setParameter("userid",id).getResultList();
 
 			if(result.isEmpty()){
-				LOGGER.error("An attempt to get info about user ID " + id + " from the database failed.");
+				LOGGER.error("An attempt to get info about user ID " + id + " from the database was made, but it came empty.");
 				return null;
 			}else{
 				LOGGER.debug("Information about user ID " + id + " was retrieved from the database.");
@@ -68,12 +64,12 @@ public class UserDaoHibernate implements GenericDao <User> {
 	
 	@Override
 	public User getByUsername(String username) {
-		try(Session session = new Configuration().configure().buildSessionFactory().openSession()){
+		try(Session session = HibernateUtility.INSTANCE.getSessionFactoryInstance().openSession()){
 			Query<User> query = session.createNamedQuery("getByUsername", User.class).setParameter("username", username);
 			List<User> result = query.getResultList();
 
 			if(result.isEmpty()){
-				LOGGER.error("An attempt to get info about username " + username + " from the database failed.");
+				LOGGER.error("An attempt to get info about username " + username + " from the database was made, but it came empty.");
 				return null;
 			}else{
 				LOGGER.debug("Information about username " + username + " was retrieved from the database.");
@@ -84,22 +80,28 @@ public class UserDaoHibernate implements GenericDao <User> {
 
 	@Override
 	public Serializable insert(User t) {
-		try(Session session = new Configuration().configure().buildSessionFactory().openSession()){
+		try(Session session = HibernateUtility.INSTANCE.getSessionFactoryInstance().openSession()){
 			session.beginTransaction();
 			Serializable result = session.save(t);
 			session.flush();
 			session.getTransaction().commit();
-
-			return result;
+			if(result!=null) {
+				LOGGER.debug("A new user was successfully added to the database.");
+				return result;
+			}else{
+				LOGGER.error("An attempt to insert a user to the database failed.");
+				return null;
+			}
 		}
 	}
 
 	@Override
 	public void delete(User t) {
-		try(Session session = new Configuration().configure().buildSessionFactory().openSession()){
+		try(Session session = HibernateUtility.INSTANCE.getSessionFactoryInstance().openSession()){
 			session.beginTransaction();
 			session.delete(t);
 			session.getTransaction().commit();
+			LOGGER.error("An attempt to delete a user from the database was made.");
 		}
 	}
 }
