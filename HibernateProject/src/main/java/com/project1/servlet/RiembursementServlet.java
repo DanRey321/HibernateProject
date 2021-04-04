@@ -80,8 +80,25 @@ public class RiembursementServlet extends HttpServlet {
             resp.setStatus(400);
         }
 
-
     }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+        BufferedReader reader = req.getReader();
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+
+        String jsonString = sb
+                .toString();
+
+        Reimbursement reimbursement = objectMapper.readValue(jsonString, Reimbursement.class);
+        rService.updateReimbursements(reimbursement);
+    }
+
+
 
 
 }
