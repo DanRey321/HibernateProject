@@ -12,7 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = {"*.json"})
-public class HandlerServlet extends HttpServlet {
+public class ReimbursementHandlerServlet extends HttpServlet {
     private ObjectMapper objectMapper = new ObjectMapper();
     private ReimbursementService rs = new ReimbursementService();
 
