@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Deprecated
 @WebServlet("/username")
 public class getUserByUsernameServlet  extends HttpServlet{
     private ObjectMapper objectMapper = new ObjectMapper();

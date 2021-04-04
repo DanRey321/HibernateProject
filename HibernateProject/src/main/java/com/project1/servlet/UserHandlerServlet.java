@@ -1,10 +1,6 @@
 package com.project1.servlet;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.sql.SQLException;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project1.Controller.UController;
 import com.project1.model.User;
 import com.project1.service.UserService;
 
@@ -13,42 +9,32 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.sql.SQLException;
 
-@Deprecated
-@WebServlet("/user1")
-public class UserServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"*.User"})
+public class UserHandlerServlet extends HttpServlet{
     private ObjectMapper objectMapper = new ObjectMapper();
-    private UserService userService = new UserService();
-
-    public UserServlet() {
-        super();
-    }
-
-    public UserServlet(ObjectMapper objectMapper, UserService userService) {
-        this.objectMapper = objectMapper;
-        this.userService = userService;
-    }
+    private UserService us = new UserService();
 
     @Override
-    protected void doGet(HttpServletRequest req , HttpServletResponse resp) throws IOException{
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+        UController uController = new UController();
+        System.out.println(req.getRequestURI());
 
-        BufferedReader reader = req.getReader();
-
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
+        switch(req.getRequestURI()){
+            case "/HibernateProject/getAll.User":
+                uController.getAlL(req,resp);
+                break;
+            case "/HibernateProject/byId.User":
+                uController.getById(req, resp);
+                break;
+            case "/HibernateProject/byUsername.User" :
+                System.out.println("True");
+                uController.getByUsername(req, resp);
+                break;
         }
-
-        String jsonString = sb
-                .toString();
-
-        System.out.println(jsonString);
-
-        //String json = objectMapper.writeValueAsString(userService.fetchAllUsers());
-        String json = objectMapper.writeValueAsString(userService.fetchAllUsers());
-        resp.getWriter().append(json);
-        resp.setContentType("application/json");
 
     }
 
@@ -69,7 +55,7 @@ public class UserServlet extends HttpServlet {
 
         //System.out.println(jsonString);
         try {
-            user = userService.insertUser(objectMapper.readValue(jsonString, User.class));
+            user = us.insertUser(objectMapper.readValue(jsonString, User.class));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -97,7 +83,7 @@ public class UserServlet extends HttpServlet {
                 .toString();
 
         try{
-            if(userService.deleteUser(objectMapper.readValue(jsonString, User.class))){
+            if(us.deleteUser(objectMapper.readValue(jsonString, User.class))){
                 resp.getWriter().append(" Deleted from database!!!");
                 resp.setStatus(200);
             }else{
@@ -110,6 +96,7 @@ public class UserServlet extends HttpServlet {
 
 
     }
+
 
 
 }

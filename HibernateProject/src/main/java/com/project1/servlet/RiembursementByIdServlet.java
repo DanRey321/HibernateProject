@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+@Deprecated
 @WebServlet("/byAuthorId")
 public class RiembursementByIdServlet extends HttpServlet {
     private ObjectMapper objectMapper = new ObjectMapper();
