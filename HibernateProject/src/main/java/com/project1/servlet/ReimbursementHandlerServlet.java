@@ -2,6 +2,7 @@ package com.project1.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project1.Controller.RController;
 import com.project1.model.Reimbursement;
+import com.project1.model.updateList;
 import com.project1.service.ReimbursementService;
 
 import javax.servlet.annotation.WebServlet;
@@ -89,8 +90,15 @@ public class ReimbursementHandlerServlet extends HttpServlet {
         String jsonString = sb
                 .toString();
 
-        Reimbursement reimbursement = objectMapper.readValue(jsonString, Reimbursement.class);
-        rs.updateReimbursements(reimbursement);
+
+
+        updateList updateList = objectMapper.readValue(jsonString, updateList.class);
+        int[][] array = updateList.getArray();
+        int resolver = updateList.getResolver();
+        int count = rs.updateReimbursements(array,resolver);
+        resp.getWriter().append(" Columns Updated " + count);
+        resp.setStatus(200);
+
     }
 
 }

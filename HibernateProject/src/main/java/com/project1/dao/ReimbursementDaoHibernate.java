@@ -107,7 +107,7 @@ public class ReimbursementDaoHibernate implements GenericDao<Reimbursement>{
         }
     }
 
-    public void updateList(int[][] array, int resolver){
+    public int updateList(int[][] array, int resolver){
         final int ACCEPTED = 1;
         final int REJECTED = 0;
         int rowCount = 0;
@@ -129,6 +129,7 @@ public class ReimbursementDaoHibernate implements GenericDao<Reimbursement>{
             }
             session.getTransaction().commit();
             LOGGER.debug(rowCount + " reimbursement" + ((rowCount != 1) ? "s" : "") + " modified by user ID " + resolver + ".");
+            return rowCount;
         }
     }
 
