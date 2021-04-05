@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"*.json"})
+@WebServlet(urlPatterns = {"*.R"})
 public class ReimbursementHandlerServlet extends HttpServlet {
     private ObjectMapper objectMapper = new ObjectMapper();
     private ReimbursementService rs = new ReimbursementService();
@@ -23,13 +23,13 @@ public class ReimbursementHandlerServlet extends HttpServlet {
         System.out.println(req.getRequestURI());
 
         switch(req.getRequestURI()){
-            case "/HibernateProject/byAuthor.json":
+            case "/HibernateProject/byAuthor.R":
                 rController.getByAuthor(req,resp);
                 break;
-            case "/HibernateProject/byId.json":
+            case "/HibernateProject/byId.R":
                 rController.getById(req, resp);
                 break;
-            case "/HibernateProject/getAll.json" :
+            case "/HibernateProject/getAll.R" :
                 rController.getAll(req, resp);
                 break;
         }
