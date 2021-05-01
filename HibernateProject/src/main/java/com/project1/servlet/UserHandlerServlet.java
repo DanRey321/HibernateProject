@@ -59,8 +59,8 @@ public class UserHandlerServlet extends HttpServlet{
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        String insertedEmployeeJSON = objectMapper.writeValueAsString(user);
-        resp.getWriter().append(insertedEmployeeJSON);
+        String insertjson = objectMapper.writeValueAsString(user);
+        resp.getWriter().append(insertjson);
 
         resp.setContentType("application/json");
         resp.setStatus(201);
