@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-
+@Deprecated
 public class ConnectionFactory implements Closeable {
 
     public static final int CONNECTIONS = 1;

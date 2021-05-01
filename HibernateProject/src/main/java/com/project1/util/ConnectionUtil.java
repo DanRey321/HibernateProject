@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-
+@Deprecated
 public class ConnectionUtil {
 
     public static Connection getConnection() throws SQLException{

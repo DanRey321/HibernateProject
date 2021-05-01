@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Deprecated
 @WebServlet("/userID")
 public class getUserByIdServlet extends HttpServlet{
     private ObjectMapper objectMapper = new ObjectMapper();

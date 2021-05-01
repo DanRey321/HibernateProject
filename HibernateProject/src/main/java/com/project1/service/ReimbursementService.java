@@ -47,8 +47,8 @@ public class ReimbursementService {
 	}
 
 
-	public void updateReimbursements(int[][] i, int r) {
-		rh.updateList(i, r);
+	public int updateReimbursements(int[][] i, int r) {
+		return rh.updateList(i, r);
 	}
 
 	public void updateReimbursements(Reimbursement r) {
